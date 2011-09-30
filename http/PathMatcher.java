@@ -5,14 +5,15 @@ import java.util.regex.*;
 public class PathMatcher extends HttpHeaderMatcher {
 	String path=null;
 	
-	public PathMatcher(String path) {
-		// TODO Auto-generated constructor stub
+	public PathMatcher(String p) {
+		path=p;
 	}
 	
 	@Override
-	public boolean matchHeader(String header){
-		Pattern p = Pattern.compile("GET ("+path+") ");
-		Matcher m = p.matcher(header);
+	public boolean matchHeader(HttpRequest request){
+		String h=request.getHeader("get");
+		Pattern p = Pattern.compile(path);
+		Matcher m = p.matcher(h);
 		boolean b = m.matches();
 		return b;
 	}

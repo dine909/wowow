@@ -10,27 +10,23 @@ public class DefaultHttpHandler extends HttpHandler{
 		
 	}
 
-	
 	public void handle(HttpRequest request) {
-		if(!this.checkPath()) return;
+		if(!this.httpHeaderMatcher.matchHeader(request)) return;
+		HttpResponse response=null;
+		try {
+			response=request.getResponse();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		response.statusCode=StatusCodes.SC_OK;
+		response.setHeader("Content-Type", "text/plain; charset=iso-8859-1");
+		String sres="hello\n";
 		
-		OutputStream os = null;
-		try {
-			os=request.baseSocket.getOutputStream();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		PrintWriter pr=new PrintWriter(os);
-		pr.print("hello\n");
-		pr.flush();
-		try {
-			os.flush();
-			os.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(
+				sres.getBytes()));
+		
+		response.inputStream=is;
 		request.handled=true;
 		
 	}

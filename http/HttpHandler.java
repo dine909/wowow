@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class HttpHandler {
-	private HttpHeaderMatcher httpHeaderMatcher=null;
+	public HttpHeaderMatcher httpHeaderMatcher=null;
 
 	public HttpHandler(HttpHeaderMatcher m) {
 		httpHeaderMatcher=m;
@@ -14,9 +14,6 @@ public class HttpHandler {
 		
 	}
 
-	public boolean checkPath(){
-		
-		return false;
-	}
+
 	
 }
