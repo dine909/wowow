@@ -43,7 +43,10 @@ public class FileSystemHttpHandler extends HttpHandler {
 			}else{
 				size=Long.toString(file.length())+" bytes";
 			}
-			items+=item.replace("%ITEM%", f).replace("%MOD%",mod.toString()).replace("%SIZE%",size);
+			items+=item.replace("%PATHITEM%", fullPath+f)
+					.replace("%ITEM%", f)
+					.replace("%MOD%",mod.toString())
+					.replace("%SIZE%",size);
 		}
 		html=html.replace("%ITEMS%", items);
 		html=html.replace("%PATH%", fullPath);
