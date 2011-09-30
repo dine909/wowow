@@ -6,11 +6,12 @@ import java.util.LinkedList;
 
 import com.dinamoproductions.wowow.server.SocketHandle;
 import com.dinamoproductions.wowow.server.utils;
+import com.dinamoproductions.wowow.server.http.handlers.*;
 
 public class HttpSocketHandle extends SocketHandle {
-	LinkedList<DefaultHttpHandler> handlerList;
+	LinkedList<HttpHandler> handlerList;
 
-	public HttpSocketHandle(Socket _s, LinkedList<DefaultHttpHandler> h) {
+	public HttpSocketHandle(Socket _s, LinkedList<HttpHandler> h) {
 		super(_s);
 		handlerList = h;
 	}
@@ -19,7 +20,7 @@ public class HttpSocketHandle extends SocketHandle {
 	public void run() {
 		HttpRequest request = new HttpRequest(this.baseSocket);
 		HttpResponse response = null;
-		for (DefaultHttpHandler h : handlerList) {
+		for (HttpHandler h : handlerList) {
 			h.handle(request);
 			if (request.handled)
 				break;

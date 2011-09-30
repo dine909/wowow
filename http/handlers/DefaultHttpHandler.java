@@ -1,7 +1,11 @@
-package com.dinamoproductions.wowow.server.http;
+package com.dinamoproductions.wowow.server.http.handlers;
 
 import java.io.*;
 import java.net.Socket;
+
+import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
+import com.dinamoproductions.wowow.server.http.HttpRequest;
+import com.dinamoproductions.wowow.server.http.HttpResponse;
 
 public class DefaultHttpHandler extends HttpHandler{
 	
@@ -19,13 +23,11 @@ public class DefaultHttpHandler extends HttpHandler{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		response.statusCode=StatusCodes.SC_OK;
+		String sres=response.statusCode;
+		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(sres.getBytes()));
+		
+//		response.statusCode=StatusCodes.SC_OK;
 		response.setHeader("Content-Type", "text/plain; charset=iso-8859-1");
-		String sres="hello\n";
-		
-		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(
-				sres.getBytes()));
-		
 		response.inputStream=is;
 		request.handled=true;
 		
