@@ -1,10 +1,17 @@
 package com.dinamoproductions.wowow.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.util.*;
+
+import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
+import com.dinamoproductions.wowow.server.http.HttpSocketHandler;
+import com.dinamoproductions.wowow.server.http.PathMatcher;
+import com.dinamoproductions.wowow.server.http.handlers.DefaultHttpHandler;
+import com.dinamoproductions.wowow.server.http.handlers.FileSystemHttpHandler;
 
 
 public class Server extends Thread {
@@ -48,4 +55,21 @@ public class Server extends Thread {
 	public synchronized static void remove(Socket s) {
         clientList.remove(s);      
     }
+	public static void main(String [ ] args) throws IOException
+	{
+		Server s= new Server(8888);
+		HttpSocketHandler httpSocketHandler=new HttpSocketHandler();
+		
+		//serve files
+		FileSystemHttpHandler fileSystemHandler = new FileSystemHttpHandler(
+				(HttpHeaderMatcher) new PathMatcher("/files/*"),new File("/mnt/sdcard/"));
+		fileSystemHandler.allowDirectoryBrowsing=true;
+		httpSocketHandler.addHandler(fileSystemHandler);
+		
+		//serve errors
+		httpSocketHandler.addHandler(new DefaultHttpHandler((HttpHeaderMatcher) new PathMatcher("/*")));
+		
+		s.setSocketHandler(httpSocketHandler);
+		s.start();
+	}
 }

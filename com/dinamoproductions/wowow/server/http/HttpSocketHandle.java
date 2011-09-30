@@ -63,6 +63,9 @@ public class HttpSocketHandle extends SocketHandle {
 				e1.printStackTrace();
 			}
 			response.setHeader("Server:", "com.dinamoproductions.wowow");
+			if (response.inputStream != null)
+				response.setHeader("Content-Length:", Integer.toString(response.inputStream.available(),10));
+			
 			String h = response.getHeaders();
 			BufferedOutputStream bos = new BufferedOutputStream(ros);
 			PrintWriter pw = new PrintWriter(bos, true);

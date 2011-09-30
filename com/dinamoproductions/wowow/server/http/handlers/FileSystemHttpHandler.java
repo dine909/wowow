@@ -27,7 +27,7 @@ public class FileSystemHttpHandler extends HttpHandler {
 		File fileOrDir=new File(file,path);
 		boolean isDirectory = fileOrDir.isDirectory();
 
-		if(!fullPath.endsWith("/")&&isDirectory){
+		if(!fullPath.endsWith("/")&&isDirectory&&allowDirectoryBrowsing){
 			response.redirect(request, fullPath+"/");
 			return;
 		}
