@@ -30,7 +30,7 @@ public class PathMatcher extends HttpHeaderMatcher {
 	@Override
 	public boolean matchHeader(HttpRequest request) throws IOException, URISyntaxException{		
 		URI pathInfo = request.getPathInfo();
-		String URIPath = pathInfo.getPath();
+		String URIPath = pathInfo.getRawPath();
 		Matcher matcher=getMatcherPattern(request).matcher(URIPath);
 		boolean matches=matcher.matches();
 		if (matches) {
