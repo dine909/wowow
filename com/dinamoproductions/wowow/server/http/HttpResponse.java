@@ -28,4 +28,10 @@ public class HttpResponse {
 		return ret;
 				
 	}
+
+	public void redirect(HttpRequest httpRequest, String location) throws IOException{
+		statusCode=StatusCodes.SC_FOUND;
+		setHeader("Location:", location);
+		httpRequest.handled=true;
+	}
 }
