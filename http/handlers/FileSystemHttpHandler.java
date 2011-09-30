@@ -19,7 +19,7 @@ public class FileSystemHttpHandler extends HttpHandler {
 	public void handle(HttpRequest request) throws IOException {
 		if(!this.httpHeaderMatcher.matchHeader(request)) return;
 
-		String fullPath=request.getFullPath();
+		String path=request.getFullPath();
 
 		HttpResponse response=null;
 		response=request.getResponse();
@@ -43,13 +43,13 @@ public class FileSystemHttpHandler extends HttpHandler {
 			}else{
 				size=Long.toString(file.length())+" bytes";
 			}
-			items+=item.replace("%PATHITEM%", fullPath+f)
+			items+=item.replace("%PATHITEM%", path+f)
 					.replace("%ITEM%", f)
 					.replace("%MOD%",mod.toString())
 					.replace("%SIZE%",size);
 		}
 		html=html.replace("%ITEMS%", items);
-		html=html.replace("%PATH%", fullPath);
+		html=html.replace("%PATH%", path);
 		
 		
 		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(html.getBytes()));
