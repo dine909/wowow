@@ -55,7 +55,7 @@ public class Server extends Thread {
 	public synchronized static void remove(Socket s) {
         clientList.remove(s);      
     }
-	public static void main(String [ ] args) throws IOException
+	public static void main(String [ ] args) throws IOException, InterruptedException
 	{
 		int port=8888;
 		String dir="~/";
@@ -83,5 +83,6 @@ public class Server extends Thread {
 		
 		s.setSocketHandler(httpSocketHandler);
 		s.start();
+		s.join();
 	}
 }
