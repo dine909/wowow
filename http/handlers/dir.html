@@ -1,0 +1,31 @@
+<html>
+<head>
+<link href="dir.css" rel="stylesheet" type="text/css">
+<title>Directory: %PATH%</title>
+</head>
+<body>
+	<h1>Directory:%PATH%/</h1>
+	<table border="0">
+		<tbody>
+			<tr>
+				<td><a
+					href="%PATH%/../">Parent
+						Directory</a>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+%ITEMS&
+		</tbody>
+	</table>
+</body>
+</html>
+
+%%
+			<tr>
+				<td><a
+					href="%PATH%/%ITEM%">%ITEM%&nbsp;</a>
+				</td>
+				<td align="right">$SIZE%&nbsp;</td>
+				<td>%MOD%</td>
+			</tr>

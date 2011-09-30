@@ -14,7 +14,7 @@ public class DefaultHttpHandler extends HttpHandler{
 		
 	}
 
-	public void handle(HttpRequest request) {
+	public void handle(HttpRequest request) throws IOException {
 		if(!this.httpHeaderMatcher.matchHeader(request)) return;
 		HttpResponse response=null;
 		try {

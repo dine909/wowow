@@ -24,33 +24,21 @@ public class HttpRequest {
 		return httpResponse;
 	}
 
-	public HttpHeaders getHeaders(String header) {
-		if(header!=null)header=header.toLowerCase();
+	public HttpHeaders getHeaders(String header) throws IOException {
+		if (header != null)
+			header = header.toLowerCase();
 		if (headers.size() > 0)
 			return headers;
-		
+
 		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(
-					baseSocket.getInputStream()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			while(!in.ready());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
+		in = new BufferedReader(new InputStreamReader(
+				baseSocket.getInputStream()));
+		while (!in.ready())
+			;
 		while (true) {
-		String s = null;
-			try {
-				s = in.readLine().trim();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String s = null;
+			s = in.readLine().trim();
 
 			if (s.equals("")) {
 				break;
@@ -60,23 +48,23 @@ public class HttpRequest {
 			boolean matchFound = matcher.find();
 
 			if (matchFound) {
-			    // Get all groups for this match
-			    String key = matcher.group(1).toLowerCase();
-				headers.put(key,matcher.group(2));
-			    if(key.equals(header)){
-			    	break;
-			    }
+				// Get all groups for this match
+				String key = matcher.group(1).toLowerCase();
+				headers.put(key, matcher.group(2));
+				if (key.equals(header)) {
+					break;
+				}
 			}
-//				headers.put(key, value)
+			// headers.put(key, value)
 		}
-	
+
 		return headers;
 
 	}
 
-	public String getHeader(String header) {
-		String h=null;
-		h=(String) this.getHeaders(header).get(header);
+	public String getHeader(String header) throws IOException {
+		String h = null;
+		h = (String) this.getHeaders(header).get(header);
 		return h;
 	}
 }

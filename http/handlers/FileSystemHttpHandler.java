@@ -2,6 +2,7 @@ package com.dinamoproductions.wowow.server.http.handlers;
 
 import java.io.*;
 
+import com.dinamoproductions.wowow.server.utils;
 import com.dinamoproductions.wowow.server.http.*;
 
 public class FileSystemHttpHandler extends HttpHandler {
@@ -14,7 +15,7 @@ public class FileSystemHttpHandler extends HttpHandler {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void handle(HttpRequest request) {
+	public void handle(HttpRequest request) throws IOException {
 		if(!this.httpHeaderMatcher.matchHeader(request)) return;
 
 
@@ -25,10 +26,18 @@ public class FileSystemHttpHandler extends HttpHandler {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		response.statusCode=StatusCodes.SC_OK;
 		
-		String sres=response.statusCode;
-
+		response.statusCode=StatusCodes.SC_OK;
+		String sres="";
+		
+		for(String f: file.list()){
+			sres+=f+"\n";
+		}
+		
+		InputStream ddis=getClass().getResourceAsStream("dir.html");
+		
+		sres=utils.ChannelTools.convertStreamToString(ddis);
+		
 		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(sres.getBytes()));
 		
 		response.setHeader("Content-Type", "text/plain; charset=iso-8859-1");

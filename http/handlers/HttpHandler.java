@@ -13,7 +13,7 @@ public class HttpHandler {
 		httpHeaderMatcher=m;
 	}
 
-	public void handle(HttpRequest request) {
+	public void handle(HttpRequest request) throws IOException {
 		
 	}
 

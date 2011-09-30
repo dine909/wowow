@@ -21,7 +21,12 @@ public class HttpSocketHandle extends SocketHandle {
 		HttpRequest request = new HttpRequest(this.baseSocket);
 		HttpResponse response = null;
 		for (HttpHandler h : handlerList) {
-			h.handle(request);
+			try {
+				h.handle(request);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (request.handled)
 				break;
 		}

@@ -1,5 +1,6 @@
 package com.dinamoproductions.wowow.server.http;
 
+import java.io.IOException;
 import java.util.regex.*;
 
 public class PathMatcher extends HttpHeaderMatcher {
@@ -10,7 +11,7 @@ public class PathMatcher extends HttpHeaderMatcher {
 	}
 	
 	@Override
-	public boolean matchHeader(HttpRequest request){
+	public boolean matchHeader(HttpRequest request) throws IOException{
 		String h=request.getHeader("get");
 		Pattern p = Pattern.compile(path);
 		Matcher m = p.matcher(h);
