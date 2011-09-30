@@ -12,7 +12,9 @@ public class HttpRequest {
 	private String pathInfo = null;
 	HttpResponse httpResponse = null;
 	private HttpHeaders headers = new HttpHeaders();
-
+	private String path=null;
+	private String parms=null;
+	
 	public HttpRequest(Socket s) {
 		baseSocket = s;
 	}
@@ -23,7 +25,20 @@ public class HttpRequest {
 		}
 		return httpResponse;
 	}
-
+	public String getFullPath() throws IOException{
+		if(path==null){
+			String get=getHeader("get").split(" ")[0];
+			int posToParms=get.indexOf('?');
+			if(posToParms>0){
+				path=get.substring(0, posToParms);
+				parms=get.substring(path.length());
+			}else{
+				path=get;
+				parms="";
+			}
+		}
+		return path;
+	}
 	public HttpHeaders getHeaders(String header) throws IOException {
 		if (header != null)
 			header = header.toLowerCase();

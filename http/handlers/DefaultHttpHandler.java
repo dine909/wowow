@@ -6,6 +6,7 @@ import java.net.Socket;
 import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
 import com.dinamoproductions.wowow.server.http.HttpRequest;
 import com.dinamoproductions.wowow.server.http.HttpResponse;
+import com.dinamoproductions.wowow.server.http.StatusCodes;
 
 public class DefaultHttpHandler extends HttpHandler{
 	
@@ -17,12 +18,7 @@ public class DefaultHttpHandler extends HttpHandler{
 	public void handle(HttpRequest request) throws IOException {
 		if(!this.httpHeaderMatcher.matchHeader(request)) return;
 		HttpResponse response=null;
-		try {
-			response=request.getResponse();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		response=request.getResponse();
 		String sres=response.statusCode;
 		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(sres.getBytes()));
 		
