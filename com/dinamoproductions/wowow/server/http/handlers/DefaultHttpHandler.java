@@ -2,6 +2,7 @@ package com.dinamoproductions.wowow.server.http.handlers;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
 import com.dinamoproductions.wowow.server.http.HttpRequest;
@@ -15,7 +16,7 @@ public class DefaultHttpHandler extends HttpHandler{
 		
 	}
 
-	public void handle(HttpRequest request) throws IOException {
+	public void handle(HttpRequest request) throws IOException, URISyntaxException {
 		if(!this.httpHeaderMatcher.matchHeader(request)) return;
 		HttpResponse response=null;
 		response=request.getResponse();

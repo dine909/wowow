@@ -1,6 +1,7 @@
 package com.dinamoproductions.wowow.server.http.handlers;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.Date;
 
 import com.dinamoproductions.wowow.server.utils;
@@ -16,14 +17,23 @@ public class FileSystemHttpHandler extends HttpHandler {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void handle(HttpRequest request) throws IOException {
+	public void handle(HttpRequest request) throws IOException, URISyntaxException {
 		if(!this.httpHeaderMatcher.matchHeader(request)) return;
 
-		String path=request.getFullPath();
-
-		HttpResponse response=null;
-		response=request.getResponse();
+		String fullPath=request.getPathInfo().getPath();
+		HttpResponse response=request.getResponse();
 		
+		if(!fullPath.endsWith("/")){
+			response.redirect(request, fullPath+"/");
+			return;
+		}
+		String path=request.getPath().getPath();
+	
+		handleDirectoryListing(request, fullPath, response);
+		
+	}
+
+	private void handleDirectoryListing(HttpRequest request, String fullPath, HttpResponse response) {
 		response.statusCode=StatusCodes.SC_OK;
 		InputStream ddis=getClass().getResourceAsStream("dir.html");
 		
@@ -43,13 +53,13 @@ public class FileSystemHttpHandler extends HttpHandler {
 			}else{
 				size=Long.toString(file.length())+" bytes";
 			}
-			items+=item.replace("%PATHITEM%", path+f)
+			items+=item.replace("%PATHITEM%", fullPath+f)
 					.replace("%ITEM%", f)
 					.replace("%MOD%",mod.toString())
 					.replace("%SIZE%",size);
 		}
 		html=html.replace("%ITEMS%", items);
-		html=html.replace("%PATH%", path);
+		html=html.replace("%PATH%", fullPath);
 		
 		
 		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(html.getBytes()));
@@ -57,7 +67,6 @@ public class FileSystemHttpHandler extends HttpHandler {
 		response.setHeader("Content-Type", "text/plain; charset=iso-8859-1");
 		response.inputStream=is;
 		request.handled=true;
-		
 	}
 
 }

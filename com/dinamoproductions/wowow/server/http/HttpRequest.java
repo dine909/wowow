@@ -9,13 +9,10 @@ public class HttpRequest {
 	public Socket baseSocket;
 	public boolean handled = false;
 	private InputStream inputStream = null;
-	private String pathInfo = null;
+	private URI pathInfo = null;
+	private URI relPath = null;
 	HttpResponse httpResponse = null;
 	private HttpHeaders headers = new HttpHeaders();
-	private String fullPath=null;
-	private String path=null;
-	private String parms=null;
-	
 	public HttpRequest(Socket s) {
 		baseSocket = s;
 	}
@@ -26,19 +23,13 @@ public class HttpRequest {
 		}
 		return httpResponse;
 	}
-	public String getFullPath() throws IOException{
-		if(fullPath==null){
+	public URI getPathInfo() throws IOException, URISyntaxException{
+		if(pathInfo==null){
 			String get=getHeader("get").split(" ")[0];
 			int posToParms=get.indexOf('?');
-			if(posToParms>0){
-				fullPath=get.substring(0, posToParms);
-				parms=get.substring(fullPath.length());
-			}else{
-				fullPath=get;
-				parms="";
-			}
+			pathInfo=new URI(get);
 		}
-		return fullPath;
+		return pathInfo;
 	}
 	public HttpHeaders getHeaders(String header) throws IOException {
 		if (header != null)
@@ -84,12 +75,12 @@ public class HttpRequest {
 		return h;
 	}
 
-	public void setPath(String substring) {
-		path=substring;
+	public void setPath(URI substring) {
+		relPath=substring;
 		
 	}
-	public String getPath() {
-		return path;
+	public URI getPath() {
+		return relPath;
 		
 	}
 }

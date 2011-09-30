@@ -1,6 +1,8 @@
 package com.dinamoproductions.wowow.server.http;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.*;
 
 public class PathMatcher extends HttpHeaderMatcher {
@@ -26,14 +28,17 @@ public class PathMatcher extends HttpHeaderMatcher {
 
 	}
 	@Override
-	public boolean matchHeader(HttpRequest request) throws IOException{		
-		String fullPath = request.getFullPath();
-		Matcher matcher=getMatcherPattern(request).matcher(fullPath);
+	public boolean matchHeader(HttpRequest request) throws IOException, URISyntaxException{		
+		URI pathInfo = request.getPathInfo();
+		String URIPath = pathInfo.getPath();
+		Matcher matcher=getMatcherPattern(request).matcher(URIPath);
 		boolean matches=matcher.matches();
 		if (matches) {
-			int matchEnd = matcher.end();
-			matched = fullPath.substring(0,matchEnd);
-			request.setPath(fullPath.substring(matchEnd));
+			String mResult=matcher.group(1);
+			if(mResult==null)mResult=matcher.group(0);
+			int matchEnd = mResult.length();
+			matched = URIPath.substring(0,matchEnd);
+			request.setPath(new URI(URIPath.substring(matchEnd)));
 		}
 		return matches;
 	}
