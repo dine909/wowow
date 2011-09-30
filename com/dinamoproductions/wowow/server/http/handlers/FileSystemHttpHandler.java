@@ -56,15 +56,16 @@ public class FileSystemHttpHandler extends HttpHandler {
 		String items="";
 		
 		String path = request.getPathInfo().getPath();
-		for(String f: new File(file,request.getPath().getPath()).list()){
-			File nf=new File(file,f);
+		File realPath = new File(file,request.getPath().getPath());
+		for(String f: realPath.list()){
+			File nf=new File(realPath,f);
 			String size="";
 			Date mod=new Date(nf.lastModified());
 			if(nf.isDirectory())
 			{
 				f+="/";
 			}else{
-				size=Long.toString(file.length())+" bytes";
+				size=Long.toString(nf.length())+" bytes";
 			}
 			items+=item.replace("%PATHITEM%", path+f)
 					.replace("%ITEM%", f)
