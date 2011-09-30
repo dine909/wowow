@@ -31,8 +31,9 @@ public class PathMatcher extends HttpHeaderMatcher {
 		Matcher matcher=getMatcherPattern(request).matcher(fullPath);
 		boolean matches=matcher.matches();
 		if (matches) {
-			matched = matcher.group(matcher.groupCount()).toLowerCase();
-			request.setPath(fullPath.substring(matched.length()));
+			int matchEnd = matcher.end();
+			matched = fullPath.substring(0,matchEnd);
+			request.setPath(fullPath.substring(matchEnd));
 		}
 		return matches;
 	}
