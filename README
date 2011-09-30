@@ -10,12 +10,12 @@ HttpSocketHandler httpSocketHandler=new HttpSocketHandler();
 
 //serve files
 FileSystemHttpHandler fileSystemHandler = new FileSystemHttpHandler(
-		(HttpHeaderMatcher) new PathMatcher("/files/.*"),new File("/"));
+		(HttpHeaderMatcher) new PathMatcher("/files/*"),new File("/"));
 fileSystemHandler.allowDirectoryBrowsing=true;
 httpSocketHandler.addHandler(fileSystemHandler);
 
 //serve errors
-httpSocketHandler.addHandler(new DefaultHttpHandler((HttpHeaderMatcher) new PathMatcher("/.*")));
+httpSocketHandler.addHandler(new DefaultHttpHandler((HttpHeaderMatcher) new PathMatcher("/*")));
 
 s.setSocketHandler(httpSocketHandler);
 s.start();
