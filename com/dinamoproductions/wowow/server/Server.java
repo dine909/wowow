@@ -57,12 +57,24 @@ public class Server extends Thread {
     }
 	public static void main(String [ ] args) throws IOException
 	{
-		Server s= new Server(8888);
+		int port=8888;
+		String dir="~/";
+		if(args!=null){
+			if(args.length>0)
+			{
+				dir=args[0];
+			}
+			if(args.length>1)
+			{
+				port=Integer.parseInt(args[1], 10);
+			}
+		}
+		Server s= new Server(port);
 		HttpSocketHandler httpSocketHandler=new HttpSocketHandler();
 		
 		//serve files
 		FileSystemHttpHandler fileSystemHandler = new FileSystemHttpHandler(
-				(HttpHeaderMatcher) new PathMatcher("/files/*"),new File("/mnt/sdcard/"));
+				(HttpHeaderMatcher) new PathMatcher("/*"),new File(dir));
 		fileSystemHandler.allowDirectoryBrowsing=true;
 		httpSocketHandler.addHandler(fileSystemHandler);
 		
