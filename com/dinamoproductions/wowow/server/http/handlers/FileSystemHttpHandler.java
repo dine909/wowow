@@ -22,18 +22,30 @@ public class FileSystemHttpHandler extends HttpHandler {
 
 		String fullPath=request.getPathInfo().getPath();
 		HttpResponse response=request.getResponse();
-		
-		if(!fullPath.endsWith("/")){
+
+		String path=request.getPath().getPath();
+		File fileOrDir=new File(file,path);
+		boolean isDirectory = fileOrDir.isDirectory();
+
+		if(!fullPath.endsWith("/")&&isDirectory){
 			response.redirect(request, fullPath+"/");
 			return;
 		}
-		String path=request.getPath().getPath();
-	
-		handleDirectoryListing(request, fullPath, response);
+
+		if(isDirectory&&allowDirectoryBrowsing){
+			handleDirectoryListing(request, fileOrDir, response);			
+		}else if(!isDirectory){
+			if(fileOrDir.exists()){
+				FileInputStream is = new FileInputStream(fileOrDir);
+				response.statusCode=StatusCodes.SC_OK;
+				response.inputStream=is;
+				request.handled=true;
+			}
+		}
 		
 	}
 
-	private void handleDirectoryListing(HttpRequest request, String fullPath, HttpResponse response) {
+	private void handleDirectoryListing(HttpRequest request, File fileOrDir, HttpResponse response) throws IOException, URISyntaxException {
 		response.statusCode=StatusCodes.SC_OK;
 		InputStream ddis=getClass().getResourceAsStream("dir.html");
 		
@@ -43,7 +55,8 @@ public class FileSystemHttpHandler extends HttpHandler {
 		String item=htmls[1];
 		String items="";
 		
-		for(String f: file.list()){
+		String path = request.getPathInfo().getPath();
+		for(String f: new File(file,request.getPath().getPath()).list()){
 			File nf=new File(file,f);
 			String size="";
 			Date mod=new Date(nf.lastModified());
@@ -53,13 +66,13 @@ public class FileSystemHttpHandler extends HttpHandler {
 			}else{
 				size=Long.toString(file.length())+" bytes";
 			}
-			items+=item.replace("%PATHITEM%", fullPath+f)
+			items+=item.replace("%PATHITEM%", path+f)
 					.replace("%ITEM%", f)
 					.replace("%MOD%",mod.toString())
 					.replace("%SIZE%",size);
 		}
 		html=html.replace("%ITEMS%", items);
-		html=html.replace("%PATH%", fullPath);
+		html=html.replace("%PATH%", path);
 		
 		
 		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(html.getBytes()));

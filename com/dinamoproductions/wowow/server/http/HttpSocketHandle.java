@@ -20,36 +20,37 @@ public class HttpSocketHandle extends SocketHandle {
 	public void run() {
 		HttpRequest request = new HttpRequest(this.baseSocket);
 		HttpResponse response = null;
-		for (HttpHandler h : handlerList) {
-			try {
+		URI uNormalized =null;
+		try {			
+			for (HttpHandler h : handlerList) {
 				h.handle(request);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				try {
-					response = request.getResponse();
-					String sres = response.statusCode;
-
-					ByteArrayOutputStream bout = new ByteArrayOutputStream();
-					PrintStream out1 = new PrintStream(bout);
-					e.printStackTrace(out1);
-					sres = bout.toString();
-
-					BufferedInputStream is = new BufferedInputStream(
-							new ByteArrayInputStream(sres.getBytes()));
-
-					response.statusCode = StatusCodes.SC_INTERNAL_SERVER_ERROR;
-					response.setHeader("Content-Type",
-							"text/plain; charset=iso-8859-1");
-					response.inputStream = is;
-					request.handled = true;
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				if (request.handled)
+					break;
 			}
-			if (request.handled)
-				break;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				response = request.getResponse();
+				String sres = response.statusCode;
+
+				ByteArrayOutputStream bout = new ByteArrayOutputStream();
+				PrintStream out1 = new PrintStream(bout);
+				e.printStackTrace(out1);
+				sres = bout.toString();
+
+				BufferedInputStream is = new BufferedInputStream(
+						new ByteArrayInputStream(sres.getBytes()));
+
+				response.statusCode = StatusCodes.SC_INTERNAL_SERVER_ERROR;
+				response.setHeader("Content-Type",
+						"text/plain; charset=iso-8859-1");
+				response.inputStream = is;
+				request.handled = true;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		try {
 			response = request.getResponse();
@@ -67,13 +68,14 @@ public class HttpSocketHandle extends SocketHandle {
 			PrintWriter pw = new PrintWriter(bos, true);
 			pw.println("HTTP/1.1 " + response.statusCode);
 			pw.println(h);
-		
+
 			pw.flush();
 			bos.flush();
 
 			if (response.inputStream != null) {
 				try {
-					utils.ChannelTools.fastStreamCopy(response.inputStream, bos);
+					utils.ChannelTools
+							.fastStreamCopy(response.inputStream, bos);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
