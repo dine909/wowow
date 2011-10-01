@@ -79,8 +79,7 @@ public class Server extends Thread {
 		fileSystemHandler.allowDirectoryBrowsing=true;
 		httpSocketHandler.addHandler(fileSystemHandler);
 
-		ClassResourceFile classResourceFile = new ClassResourceFile("");
-		classResourceFile.resourceClass=ClassResourceFile.class;
+		ClassResourceFile classResourceFile = new ClassResourceFile(ClassResourceFile.class,"");
 		FileSystemHttpHandler fileSystemHandler1 = new FileSystemHttpHandler(
 				(HttpHeaderMatcher) new PathMatcher("/res/*"),classResourceFile);
 		fileSystemHandler1.allowDirectoryBrowsing=true;

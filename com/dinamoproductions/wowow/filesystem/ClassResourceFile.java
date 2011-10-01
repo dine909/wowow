@@ -9,11 +9,27 @@ public class ClassResourceFile extends AbstractFile {
 	public Class<? extends Object> resourceClass=null;
 	
 	public InputStream openInputStream() throws FileNotFoundException{
-		return new FileInputStream(this.getAbsolutePath());
+		String path = removeSlash();
+		return resourceClass.getResourceAsStream(path);
+	}
+
+	private String removeSlash() {
+		String path = this.getPath();
+		if(path.startsWith("/")){
+			path=path.substring(1);
+			
+		}
+		return path;
 	}
 	
-	public ClassResourceFile(String pathname) {
+	public ClassResourceFile(String pathname) throws IOException {
 		super(pathname);
+		throw new IOException("Cannot create ClassResourceFile with no clazz");
+		// TODO Auto-generated constructor stub
+	}
+	public ClassResourceFile(Class<? extends Object> clazz, String pathname) throws IOException {
+		super(pathname);
+		resourceClass=clazz;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -42,7 +58,18 @@ public class ClassResourceFile extends AbstractFile {
 	@Override
 	public boolean isDirectory() {
 		// TODO Auto-generated method stub
-		return true;
+		String path = removeSlash();
+		URL dirURL = resourceClass.getClassLoader().getResource(path);
+	      if (dirURL != null && dirURL.getProtocol().equals("file")) {
+	        /* A file path: easy enough */
+	        try {
+				return new File(dirURL.toURI()).isDirectory();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	      } 
+	      return false;
 	}
 
 	@Override
@@ -53,11 +80,7 @@ public class ClassResourceFile extends AbstractFile {
 
 	@Override
 	public String[] list() {
-		String path = this.getPath();
-		if(path.startsWith("/")){
-			path=path.substring(1);
-			
-		}
+		String path = removeSlash();
 		URL dirURL = resourceClass.getClassLoader().getResource(path);
 	      if (dirURL != null && dirURL.getProtocol().equals("file")) {
 	        /* A file path: easy enough */
