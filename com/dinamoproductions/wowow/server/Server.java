@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.util.*;
 
+import com.dinamoproductions.wowow.filesystem.*;
 import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
 import com.dinamoproductions.wowow.server.http.HttpSocketHandler;
 import com.dinamoproductions.wowow.server.http.PathMatcher;
@@ -74,7 +75,7 @@ public class Server extends Thread {
 		
 		//serve files
 		FileSystemHttpHandler fileSystemHandler = new FileSystemHttpHandler(
-				(HttpHeaderMatcher) new PathMatcher("/*"),new File(dir));
+				(HttpHeaderMatcher) new PathMatcher("/*"),new FileSystemFile(dir));
 		fileSystemHandler.allowDirectoryBrowsing=true;
 		httpSocketHandler.addHandler(fileSystemHandler);
 		

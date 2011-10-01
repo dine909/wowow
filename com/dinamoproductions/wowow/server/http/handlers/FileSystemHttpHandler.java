@@ -1,6 +1,7 @@
 package com.dinamoproductions.wowow.server.http.handlers;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -8,25 +9,31 @@ import java.util.Date;
 
 import com.dinamoproductions.wowow.server.utils;
 import com.dinamoproductions.wowow.server.http.*;
+import com.dinamoproductions.wowow.filesystem.*;
 
 public class FileSystemHttpHandler extends HttpHandler {
-	File file=null;
+	AbstractFile file=null;
+	Class<? extends AbstractFile> fType=null;
+	
 	public boolean allowDirectoryBrowsing=false
 			;
-	public FileSystemHttpHandler(HttpHeaderMatcher m, File f) {
+	public FileSystemHttpHandler(HttpHeaderMatcher m, AbstractFile f) {
 		super(m);
-		file=f;
+		fType = f.getClass();
+		file=(AbstractFile)f;
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void handle(HttpRequest request) throws IOException, URISyntaxException {
+	public void handle(HttpRequest request) throws IOException, URISyntaxException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if(!this.httpHeaderMatcher.matchHeader(request)) return;
 
 		String fullPath=request.getPathInfo().getPath();
 		HttpResponse response=request.getResponse();
 
 		String path=request.getPath().getRawPath();
-		File fileOrDir=new File(file,URLDecoder.decode(path));
+		Constructor<? extends AbstractFile> constructor = fType.getConstructor(new Class [] {File.class,String.class});
+		AbstractFile fileOrDir=constructor.newInstance(new Object[] {file,URLDecoder.decode(path)});
+		
 		boolean isDirectory = fileOrDir.isDirectory();
 
 		if(!fullPath.endsWith("/")&&isDirectory&&allowDirectoryBrowsing){
@@ -38,16 +45,15 @@ public class FileSystemHttpHandler extends HttpHandler {
 			handleDirectoryListing(request, fileOrDir, response);			
 		}else if(!isDirectory){
 			if(fileOrDir.exists()){
-				FileInputStream is = new FileInputStream(fileOrDir.getPath());
+				response.inputStream=fileOrDir.openInputStream();		
 				response.statusCode=StatusCodes.SC_OK;
-				response.inputStream=is;
 				request.handled=true;
 			}
 		}
 		
 	}
 
-	private void handleDirectoryListing(HttpRequest request, File fileOrDir, HttpResponse response) throws IOException, URISyntaxException {
+	private void handleDirectoryListing(HttpRequest request, AbstractFile fileOrDir, HttpResponse response) throws IOException, URISyntaxException {
 		response.statusCode=StatusCodes.SC_OK;
 		InputStream ddis=getClass().getResourceAsStream("dir.html");
 		
@@ -58,9 +64,9 @@ public class FileSystemHttpHandler extends HttpHandler {
 		String items="";
 		
 		String path = request.getPathInfo().getPath();
-		File realPath = new File(file,URLDecoder.decode(request.getPath().getRawPath()));
+		AbstractFile realPath = new AbstractFile(file,URLDecoder.decode(request.getPath().getRawPath()));
 		for(String f: realPath.list()){
-			File nf=new File(realPath,f);
+			AbstractFile nf=new AbstractFile(realPath,f);
 			String size="";
 			Date mod=new Date(nf.lastModified());
 			String fe=URLEncoder.encode(f);

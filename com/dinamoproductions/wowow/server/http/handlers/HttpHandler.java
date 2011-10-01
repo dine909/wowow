@@ -1,6 +1,7 @@
 package com.dinamoproductions.wowow.server.http.handlers;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
@@ -14,7 +15,7 @@ public class HttpHandler {
 		httpHeaderMatcher=m;
 	}
 
-	public void handle(HttpRequest request) throws IOException, URISyntaxException {
+	public void handle(HttpRequest request) throws IOException, URISyntaxException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		
 	}
 
