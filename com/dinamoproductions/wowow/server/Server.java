@@ -58,7 +58,7 @@ public class Server extends Thread {
 	public static void main(String [ ] args) throws IOException, InterruptedException
 	{
 		int port=8888;
-		String dir="~/";
+		String dir="/";
 		if(args!=null){
 			if(args.length>0)
 			{
