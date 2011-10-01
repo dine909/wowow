@@ -52,20 +52,24 @@ public class FileSystemHttpHandler extends HttpHandler {
 		}
 		
 	}
-
-	private void handleDirectoryListing(HttpRequest request, AbstractFile fileOrDir, HttpResponse response) throws IOException, URISyntaxException {
-		response.statusCode=StatusCodes.SC_OK;
-		InputStream ddis=getClass().getResourceAsStream("dir.html");
-		
-		String html=utils.ChannelTools.convertStreamToString(ddis);
+	String html=null;
+	String item=null;
+	private void getHTML(){
+		if(html!=null)return;
+		InputStream ddis=getClass().getResourceAsStream("dir.html");	
+		html=utils.ChannelTools.convertStreamToString(ddis);
 		String[] htmls=html.split("%%");
 		html=htmls[0];
-		String item=htmls[1];
+		item=htmls[1];
+	}
+	private void handleDirectoryListing(HttpRequest request, AbstractFile fileOrDir, HttpResponse response) throws IOException, URISyntaxException {
+		response.statusCode=StatusCodes.SC_OK;
+		getHTML();
 		String items="";
 		
 		String path = request.getPathInfo().getPath();
 		AbstractFile realPath = new AbstractFile(file,URLDecoder.decode(request.getPath().getRawPath()));
-		for(String f: realPath.list()){
+		for(String f: fileOrDir.list()){
 			AbstractFile nf=new AbstractFile(realPath,f);
 			String size="";
 			Date mod=new Date(nf.lastModified());
@@ -81,11 +85,11 @@ public class FileSystemHttpHandler extends HttpHandler {
 					.replace("%MOD%",mod.toString())
 					.replace("%SIZE%",size);
 		}
-		html=html.replace("%ITEMS%", items);
-		html=html.replace("%PATH%", path);
+		String htmlo=html.replace("%ITEMS%", items);
+		htmlo=htmlo.replace("%PATH%", path);
 		
 		
-		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(html.getBytes()));
+		BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(htmlo.getBytes()));
 		
 		response.setHeader("Content-Type", "text/plain; charset=iso-8859-1");
 		response.inputStream=is;
