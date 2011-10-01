@@ -13,13 +13,11 @@ import com.dinamoproductions.wowow.filesystem.*;
 
 public class FileSystemHttpHandler extends HttpHandler {
 	AbstractFile file=null;
-	Class<? extends AbstractFile> fType=null;
 	
 	public boolean allowDirectoryBrowsing=false
 			;
 	public FileSystemHttpHandler(HttpHeaderMatcher m, AbstractFile f) {
 		super(m);
-		fType = f.getClass();
 		file=(AbstractFile)f;
 		// TODO Auto-generated constructor stub
 	}
@@ -31,8 +29,7 @@ public class FileSystemHttpHandler extends HttpHandler {
 		HttpResponse response=request.getResponse();
 
 		String path=request.getPath().getRawPath();
-		Constructor<? extends AbstractFile> constructor = fType.getConstructor(new Class [] {File.class,String.class});
-		AbstractFile fileOrDir=constructor.newInstance(new Object[] {file,URLDecoder.decode(path)});
+		AbstractFile fileOrDir=file.getFile(URLDecoder.decode(path));
 		
 		boolean isDirectory = fileOrDir.isDirectory();
 
