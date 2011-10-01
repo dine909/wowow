@@ -68,9 +68,8 @@ public class FileSystemHttpHandler extends HttpHandler {
 		String items="";
 		
 		String path = request.getPathInfo().getPath();
-		AbstractFile realPath = new AbstractFile(file,URLDecoder.decode(request.getPath().getRawPath()));
 		for(String f: fileOrDir.list()){
-			AbstractFile nf=new AbstractFile(realPath,f);
+			AbstractFile nf=fileOrDir.getFile(f);
 			String size="";
 			Date mod=new Date(nf.lastModified());
 			String fe=URLEncoder.encode(f);

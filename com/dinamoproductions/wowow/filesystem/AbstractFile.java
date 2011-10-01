@@ -3,7 +3,7 @@ package com.dinamoproductions.wowow.filesystem;
 import java.io.*;
 import java.net.URI;
 
-public class AbstractFile extends File {
+public abstract class AbstractFile extends File {
 
 	
 	public InputStream openInputStream() throws FileNotFoundException{	
@@ -29,5 +29,8 @@ public class AbstractFile extends File {
 		super(parent, child);
 		// TODO Auto-generated constructor stub
 	}
-
+	public AbstractFile getFile(String path){
+		return null;
+		
+	}
 }

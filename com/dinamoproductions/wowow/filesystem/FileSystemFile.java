@@ -29,4 +29,10 @@ public class FileSystemFile extends AbstractFile {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public AbstractFile getFile(String path) {
+		// TODO Auto-generated method stub
+		return new FileSystemFile(this,path);
+	}
+
 }
