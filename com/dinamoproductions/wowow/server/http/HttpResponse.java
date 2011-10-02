@@ -49,6 +49,7 @@ public class HttpResponse {
 	protected void sendResponse(OutputStream ros) throws IOException {
 		
 		setHeader("Server:", "com.dinamoproductions.wowow");
+		setHeader("Connection:", "close");
 		setHeader("Cache-Control:", cacheControlMaxAge);
 		setHeader("Date:", HttpDate.rfc1123Format.format(new Date()));
 		
