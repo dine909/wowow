@@ -56,24 +56,13 @@ public class FileSystemHttpHandler extends AbstractHttpHandler {
 		}
 
 		if (isDirectory && allowDirectoryBrowsing) {
-			getFileSystemHttpDirectoryListingHandler().handle(request, fileOrDir, response,this);
+			getFileSystemHttpDirectoryListingHandler().handle(request, fileOrDir, response);
 		} else if (!isDirectory) {
-			getFileSystemHttpContentHandler().handle(request, response, fileOrDir,this);
+			getFileSystemHttpContentHandler().handle(request, response, fileOrDir);
 		}
 
 	}
 
-	String html = null;
-	String item = null;
-
-	public void getHTML() {
-		if (html != null)
-			return;
-		InputStream ddis = getClass().getResourceAsStream("dir.html");
-		html = Utils.ChannelTools.convertStreamToString(ddis);
-		String[] htmls = html.split("%%");
-		html = htmls[0];
-		item = htmls[1];
-	}
+	
 
 }

@@ -11,7 +11,7 @@ import com.dinamoproductions.wowow.server.http.StatusCodes;
 
 public class FileSystemHttpContentHandler {
 
-	public void handle(HttpRequest request, HttpResponse response, AbstractFile fileOrDir, FileSystemHttpHandler fileSystemHttpHandler) throws IOException {
+	public void handle(HttpRequest request, HttpResponse response, AbstractFile fileOrDir) throws IOException {
 		int start = 0;
 		int end = 0;
 		if (fileOrDir.exists()) {

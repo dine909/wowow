@@ -3,21 +3,35 @@ package com.dinamoproductions.wowow.server.http.handlers;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Date;
 
 import com.dinamoproductions.wowow.filesystem.AbstractFile;
+import com.dinamoproductions.wowow.server.Utils;
 import com.dinamoproductions.wowow.server.http.HttpRequest;
 import com.dinamoproductions.wowow.server.http.HttpResponse;
 import com.dinamoproductions.wowow.server.http.StatusCodes;
 
 public class FileSystemHttpDirectoryListingHandler {
 
-	public void handle(HttpRequest request, AbstractFile fileOrDir, HttpResponse response, FileSystemHttpHandler fileSystemHttpHandler) throws IOException,
+	String html = null;
+	String item = null;
+	private  void getHTML() {
+		if (html != null)
+			return;
+		InputStream ddis = getClass().getResourceAsStream("dir.html");
+		html = Utils.ChannelTools.convertStreamToString(ddis);
+		String[] htmls = html.split("%%");
+		html = htmls[0];
+		item = htmls[1];
+	}
+	
+	public void handle(HttpRequest request, AbstractFile fileOrDir, HttpResponse response) throws IOException,
 			URISyntaxException {
 		response.statusCode = StatusCodes.SC_OK;
-		fileSystemHttpHandler.getHTML();
+		getHTML();
 		String items = "";
 	
 		String path = request.getPathInfo().getPath();
@@ -31,10 +45,10 @@ public class FileSystemHttpDirectoryListingHandler {
 			} else {
 				size = Long.toString(nf.length()) + " bytes";
 			}
-			items += fileSystemHttpHandler.item.replace("%PATHITEM%", path + fe).replace("%ITEM%", f)
+			items += item.replace("%PATHITEM%", path + fe).replace("%ITEM%", f)
 					.replace("%MOD%", mod.toString()).replace("%SIZE%", size);
 		}
-		String htmlo = fileSystemHttpHandler.html.replace("%ITEMS%", items);
+		String htmlo = html.replace("%ITEMS%", items);
 		htmlo = htmlo.replace("%PATH%", path);
 	
 		BufferedInputStream is = new BufferedInputStream(
