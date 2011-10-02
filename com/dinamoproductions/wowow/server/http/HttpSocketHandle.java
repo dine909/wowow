@@ -21,6 +21,7 @@ public class HttpSocketHandle extends AbstractSocketHandle {
 		HttpResponse response = null;
 		URI uNormalized =null;
 		try {			
+			response=request.getResponse();
 			for (AbstractHttpHandler h : handlerList) {
 				h.handle(request);
 				if (request.handled)
