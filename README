@@ -3,14 +3,14 @@ Example Usage:
 Serve files from root on /files
 Serve 404 error (via DefaultHttpHandler) to anything else         
 
-Code:
+Example Code:
 
 Server s= new Server(8888);
 HttpSocketHandler httpSocketHandler=new HttpSocketHandler();
 
 //serve files
 FileSystemHttpHandler fileSystemHandler = new FileSystemHttpHandler(
-		(HttpHeaderMatcher) new PathMatcher("/files/*"),new File("/"));
+		(HttpHeaderMatcher) new PathMatcher("/files/*"),new FileSystemFile("/"));
 fileSystemHandler.allowDirectoryBrowsing=true;
 httpSocketHandler.addHandler(fileSystemHandler);
 
@@ -19,3 +19,5 @@ httpSocketHandler.addHandler(new DefaultHttpHandler((HttpHeaderMatcher) new Path
 
 s.setSocketHandler(httpSocketHandler);
 s.start();
+s.join();
+
