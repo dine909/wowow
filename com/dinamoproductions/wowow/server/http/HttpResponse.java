@@ -7,55 +7,62 @@ import com.dinamoproductions.wowow.server.utils;
 import com.dinamoproductions.wowow.server.utils.ChannelTools;
 
 public class HttpResponse {
-	public InputStream inputStream=null ;
-	private HttpHeaders headers=new HttpHeaders(); 
-	public String statusCode=StatusCodes.SC_NOT_FOUND;
+	public InputStream inputStream = null;
+	private HttpHeaders headers = new HttpHeaders();
+	public String statusCode = StatusCodes.SC_NOT_FOUND;
 	public String mimetype;
-	protected String cacheControlMaxAge=null;
+	protected String cacheControlMaxAge = null;
+
 	public HttpResponse() {
 		setCacheMaxAge(0);
 
 	}
-	public void setCacheMaxAge(int age){
-		cacheControlMaxAge="max-age="+age;
-		if(age==0) {
-			cacheControlMaxAge+=" must-revalidate";
+
+	public void setCacheMaxAge(int age) {
+		cacheControlMaxAge = "max-age=" + age;
+		if (age == 0) {
+			cacheControlMaxAge += " must-revalidate";
 		}
-	}
-	public void setHeader(String key,String value){
-		headers.put(key, value);
-	}
-	public String getHeader(String key){
-		return (String) headers.get(key);
-	}
-	
-	public String getHeaders(){
-		String ret="";
-		Enumeration e = headers.keys();
-		while(e.hasMoreElements()){
-			String k=(String) e.nextElement();
-			String v=(String) headers.get(k);
-			ret+=k+" "+v+"\n";
-		}
-		return ret;
-				
 	}
 
-	public void redirect(HttpRequest httpRequest, String location) throws IOException{
-		statusCode=StatusCodes.SC_FOUND;
-		setHeader("Location:", location);
-		httpRequest.handled=true;
+	public void setHeader(String key, String value) {
+		headers.put(key, value);
 	}
+
+	public String getHeader(String key) {
+		return (String) headers.get(key);
+	}
+
+	public String getHeaders() {
+		String ret = "";
+		Enumeration e = headers.keys();
+		while (e.hasMoreElements()) {
+			String k = (String) e.nextElement();
+			String v = (String) headers.get(k);
+			ret += k + " " + v + "\n";
+		}
+		return ret;
+
+	}
+
+	public void redirect(HttpRequest httpRequest, String location)
+			throws IOException {
+		statusCode = StatusCodes.SC_FOUND;
+		setHeader("Location:", location);
+		httpRequest.handled = true;
+	}
+
 	protected void sendResponse(OutputStream ros) throws IOException {
-		
+
 		setHeader("Server:", "com.dinamoproductions.wowow");
 		setHeader("Connection:", "close");
 		setHeader("Cache-Control:", cacheControlMaxAge);
 		setHeader("Date:", HttpDate.rfc1123Format.format(new Date()));
-		
-		if (inputStream != null&&getHeader("Content-Length:")==null)
-			setHeader("Content-Length:", Integer.toString(inputStream.available(),10));
-		
+
+		if (inputStream != null && getHeader("Content-Length:") == null)
+			setHeader("Content-Length:",
+					Integer.toString(inputStream.available(), 10));
+
 		String h = getHeaders();
 		BufferedOutputStream bos = new BufferedOutputStream(ros);
 		PrintWriter pw = new PrintWriter(bos, true);
@@ -67,8 +74,7 @@ public class HttpResponse {
 
 		if (inputStream != null) {
 			try {
-				ChannelTools
-						.streamCopy(inputStream, bos);
+				ChannelTools.streamCopy(inputStream, bos);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -78,6 +84,7 @@ public class HttpResponse {
 		bos.flush();
 		bos.close();
 	}
+
 	public void sendErrorResponse(HttpRequest request, Exception e) {
 		String sres = statusCode;
 
@@ -90,8 +97,7 @@ public class HttpResponse {
 				new ByteArrayInputStream(sres.getBytes()));
 
 		statusCode = StatusCodes.SC_INTERNAL_SERVER_ERROR;
-		setHeader("Content-Type",
-				"text/plain; charset=iso-8859-1");
+		setHeader("Content-Type", "text/plain; charset=iso-8859-1");
 		inputStream = is;
 		request.handled = true;
 	}

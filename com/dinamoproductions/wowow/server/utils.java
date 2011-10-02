@@ -32,9 +32,9 @@ public class utils {
 			fastChannelCopy((ReadableByteChannel) Channels.newChannel(is),
 					(WritableByteChannel) Channels.newChannel(os));
 		}
-		
-		public static String convertStreamToString(InputStream is) { 
-		    return new Scanner(is).useDelimiter("\\A").next();
+
+		public static String convertStreamToString(InputStream is) {
+			return new Scanner(is).useDelimiter("\\A").next();
 		}
 	}
 }

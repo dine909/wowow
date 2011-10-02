@@ -5,11 +5,10 @@ import java.net.URI;
 
 public abstract class AbstractFile extends File {
 
-	
-	public InputStream openInputStream() throws FileNotFoundException{	
+	public InputStream openInputStream() throws FileNotFoundException {
 		return null;
 	}
-	
+
 	public AbstractFile(String pathname) {
 		super(pathname);
 		// TODO Auto-generated constructor stub
@@ -29,8 +28,9 @@ public abstract class AbstractFile extends File {
 		super(parent, child);
 		// TODO Auto-generated constructor stub
 	}
-	public AbstractFile getFile(String path){
+
+	public AbstractFile getFile(String path) {
 		return null;
-		
+
 	}
 }

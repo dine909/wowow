@@ -5,7 +5,7 @@ import java.net.*;
 
 public class FileSystemFile extends AbstractFile {
 
-	public InputStream openInputStream() throws FileNotFoundException{
+	public InputStream openInputStream() throws FileNotFoundException {
 		return new FileInputStream(this.getAbsolutePath());
 	}
 
@@ -32,7 +32,7 @@ public class FileSystemFile extends AbstractFile {
 	@Override
 	public AbstractFile getFile(String path) {
 		// TODO Auto-generated method stub
-		return new FileSystemFile(this,path);
+		return new FileSystemFile(this, path);
 	}
 
 }

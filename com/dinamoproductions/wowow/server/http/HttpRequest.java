@@ -13,9 +13,9 @@ public class HttpRequest {
 	private URI relPath = null;
 	HttpResponse httpResponse = null;
 	private HttpHeaders headers = new HttpHeaders();
-	boolean gotAllHeaders=false;
+	boolean gotAllHeaders = false;
 	BufferedReader in = null;
-	private HttpCacheControl httpCacheControl=null;
+	private HttpCacheControl httpCacheControl = null;
 
 	public HttpRequest(Socket s) {
 		baseSocket = s;
@@ -27,21 +27,22 @@ public class HttpRequest {
 		}
 		return httpCacheControl;
 	}
-	
+
 	public HttpResponse getResponse() throws IOException {
 		if (httpResponse == null) {
 			return httpResponse = new HttpResponse();
 		}
 		return httpResponse;
 	}
-	public URI getPathInfo() throws IOException, URISyntaxException{
-		if(pathInfo==null){
-			String get=getHeader("get").split(" ")[0];
-			pathInfo=new URI(get).normalize();
+
+	public URI getPathInfo() throws IOException, URISyntaxException {
+		if (pathInfo == null) {
+			String get = getHeader("get").split(" ")[0];
+			pathInfo = new URI(get).normalize();
 		}
 		return pathInfo;
 	}
-	
+
 	public HttpHeaders getHeaders(String header) throws IOException {
 		if (header != null)
 			header = header.toLowerCase();
@@ -56,7 +57,7 @@ public class HttpRequest {
 			s = in.readLine().trim();
 
 			if (s.equals("")) {
-				gotAllHeaders=true;
+				gotAllHeaders = true;
 				break;
 			}
 			Pattern pattern = Pattern.compile("^(.*?) (.*)$");
@@ -79,7 +80,8 @@ public class HttpRequest {
 	}
 
 	private BufferedReader getInputStream() throws IOException {
-		if(in!=null)return in;
+		if (in != null)
+			return in;
 		in = new BufferedReader(new InputStreamReader(
 				baseSocket.getInputStream()));
 		return in;
@@ -88,9 +90,10 @@ public class HttpRequest {
 	public String getHeader(String header) {
 		String h = null;
 		try {
-			header=header.toLowerCase();
-			h= (String) headers.get(header);
-			if(h!=null)return h;
+			header = header.toLowerCase();
+			h = (String) headers.get(header);
+			if (h != null)
+				return h;
 			h = (String) this.getHeaders(header).get(header);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -101,11 +104,12 @@ public class HttpRequest {
 	}
 
 	public void setPath(URI substring) {
-		relPath=substring;
-		
+		relPath = substring;
+
 	}
+
 	public URI getPath() {
 		return relPath;
-		
+
 	}
 }
