@@ -67,7 +67,7 @@ public class HttpResponse {
 		if (inputStream != null) {
 			try {
 				ChannelTools
-						.fastStreamCopy(inputStream, bos);
+						.streamCopy(inputStream, bos);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

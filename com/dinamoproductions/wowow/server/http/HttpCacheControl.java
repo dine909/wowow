@@ -1,22 +1,38 @@
 package com.dinamoproductions.wowow.server.http;
 
+import java.io.IOException;
+import java.util.Date;
+
 public class HttpCacheControl {
 	String cacheControl=null;
+	String sImsDate=null;
 	boolean mustNotCache=false;
-	boolean preferCache=false;
+	public boolean preferCache=false;
 	boolean onlyCache=false;
+	public boolean ifNotModified=false;
 	
-	public HttpCacheControl(HttpRequest request){
+	public HttpCacheControl(HttpRequest request) throws IOException{
 		cacheControl=request.getHeader("cache-control:");
-		if(cacheControl==null)return;
-		if(cacheControl.contains("max-age=0")||cacheControl.contains("no-cache")){
-			mustNotCache=true;
-			preferCache=false;
+		sImsDate=request.getHeader("if-modified-since:");
+		
+		if(cacheControl!=null){
+			if(cacheControl.contains("max-age=0")||cacheControl.contains("no-cache")){
+				mustNotCache=true;
+				preferCache=false;
+			}
+			if(cacheControl.contains("only-if-cached")){
+				preferCache=true;
+				mustNotCache=false;
+				onlyCache=true;
+			}
 		}
-		if(cacheControl.contains("only-if-cached")){
-			preferCache=true;
-			mustNotCache=false;
-			onlyCache=true;
+		if(sImsDate!=null){
+			HttpResponse response=request.getResponse();
+			
+			if(sImsDate.equals(response.getHeader("Last-Modified:"))){
+				response.statusCode=StatusCodes.SC_NOT_MODIFIED;
+				ifNotModified=true;
+			}
 		}
 		onlyCache=onlyCache;
 	}
