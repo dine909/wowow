@@ -54,6 +54,7 @@ public class FileSystemHttpHandler extends HttpHandler {
 		if(fileOrDir.exists()){
 			response.inputStream=fileOrDir.openInputStream();	
 			response.setHeader("Accept-Ranges:", "bytes");
+			response.setHeader("Last-Modified:", HttpDate.rfc1123Format.format(fileOrDir.lastModified()));
 			
 			String sContentRange = request.getHeader("range:");
 			response.statusCode=StatusCodes.SC_OK;
