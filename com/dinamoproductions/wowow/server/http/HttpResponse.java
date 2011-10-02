@@ -3,8 +3,8 @@ package com.dinamoproductions.wowow.server.http;
 import java.io.*;
 import java.util.*;
 
-import com.dinamoproductions.wowow.server.utils;
-import com.dinamoproductions.wowow.server.utils.ChannelTools;
+import com.dinamoproductions.wowow.server.Utils;
+import com.dinamoproductions.wowow.server.Utils.ChannelTools;
 
 public class HttpResponse {
 	public InputStream inputStream = null;

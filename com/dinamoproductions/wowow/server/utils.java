@@ -5,7 +5,7 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.util.Scanner;
 
-public class utils {
+public class Utils {
 	public final static class ChannelTools {
 		public static void fastChannelCopy(final ReadableByteChannel src,
 				final WritableByteChannel dest) throws IOException {

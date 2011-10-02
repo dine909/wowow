@@ -7,7 +7,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
 
-import com.dinamoproductions.wowow.server.utils;
+import com.dinamoproductions.wowow.server.*;
 import com.dinamoproductions.wowow.server.http.*;
 import com.dinamoproductions.wowow.filesystem.*;
 
@@ -114,7 +114,7 @@ public class FileSystemHttpHandler extends AbstractHttpHandler {
 		if (html != null)
 			return;
 		InputStream ddis = getClass().getResourceAsStream("dir.html");
-		html = utils.ChannelTools.convertStreamToString(ddis);
+		html = Utils.ChannelTools.convertStreamToString(ddis);
 		String[] htmls = html.split("%%");
 		html = htmls[0];
 		item = htmls[1];
