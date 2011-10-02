@@ -41,13 +41,54 @@ public class FileSystemHttpHandler extends HttpHandler {
 		if(isDirectory&&allowDirectoryBrowsing){
 			handleDirectoryListing(request, fileOrDir, response);			
 		}else if(!isDirectory){
-			if(fileOrDir.exists()){
-				response.inputStream=fileOrDir.openInputStream();		
-				response.statusCode=StatusCodes.SC_OK;
-				request.handled=true;
-			}
+			handleContentDownload(request, response, fileOrDir);
 		}
 		
+	}
+
+	private void handleContentDownload(HttpRequest request,
+			HttpResponse response, AbstractFile fileOrDir)
+			throws IOException {
+		int start=0;
+		int end=0;
+		if(fileOrDir.exists()){
+			response.inputStream=fileOrDir.openInputStream();	
+			response.setHeader("Accept-Ranges:", "bytes");
+			
+			String sContentRange = request.getHeader("range:");
+			response.statusCode=StatusCodes.SC_OK;
+
+			if(sContentRange!=null){
+				String sRange=sContentRange.substring(6);
+				start=0;
+				String[] split = sRange.split("-");
+				int available = response.inputStream.available();
+				if(sRange.startsWith("-")){
+					start=0;
+					end=Integer.parseInt(split[1]);
+				}else if (sRange.endsWith("-")){
+					start=Integer.parseInt(split[0]);
+					end=available;
+				}else if (sRange.contains("-")){
+					start=Integer.parseInt(split[0]);
+					end=Integer.parseInt(split[1]);
+				}
+				if(start>0){
+					response.inputStream.skip(start);
+				}
+				
+				int size = end-start;
+				if(size!=available){
+					response.statusCode=StatusCodes.SC_PARTIAL_CONTENT;
+					response.setHeader("Content-Length:", Integer.toString(size,10));
+					
+				}
+				response.setHeader("Content-Range:", "bytes " + start +"-"+(end-1)+"/"+available);
+				
+			}
+			request.handled=true;
+			
+		}
 	}
 	String html=null;
 	String item=null;

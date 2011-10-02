@@ -62,8 +62,10 @@ public class HttpSocketHandle extends SocketHandle {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
 			response.setHeader("Server:", "com.dinamoproductions.wowow");
-			if (response.inputStream != null)
+			
+			if (response.inputStream != null&&response.getHeader("Content-Length:")==null)
 				response.setHeader("Content-Length:", Integer.toString(response.inputStream.available(),10));
 			
 			String h = response.getHeaders();
