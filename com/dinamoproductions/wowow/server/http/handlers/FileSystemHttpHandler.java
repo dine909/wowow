@@ -86,6 +86,9 @@ public class FileSystemHttpHandler extends HttpHandler {
 				response.setHeader("Content-Range:", "bytes " + start +"-"+(end-1)+"/"+available);
 				
 			}
+			
+			HttpCacheControl httpCacheControl=request.getHttpCacheControl();
+			response.setCacheMaxAge(300);
 			request.handled=true;
 			
 		}

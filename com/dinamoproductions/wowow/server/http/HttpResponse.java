@@ -8,11 +8,17 @@ public class HttpResponse {
 	private HttpHeaders headers=new HttpHeaders(); 
 	public String statusCode=StatusCodes.SC_NOT_FOUND;
 	public String mimetype;
-
+	protected String cacheControlMaxAge=null;
 	public HttpResponse() {
-		
+		setCacheMaxAge(0);
+
 	}
-	
+	public void setCacheMaxAge(int age){
+		cacheControlMaxAge="max-age="+age;
+		if(age==0) {
+			cacheControlMaxAge+=" must-revalidate";
+		}
+	}
 	public void setHeader(String key,String value){
 		headers.put(key, value);
 	}

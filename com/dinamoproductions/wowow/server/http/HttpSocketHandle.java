@@ -2,6 +2,7 @@ package com.dinamoproductions.wowow.server.http;
 
 import java.io.*;
 import java.net.*;
+import java.util.Date;
 import java.util.LinkedList;
 
 import com.dinamoproductions.wowow.server.SocketHandle;
@@ -64,6 +65,8 @@ public class HttpSocketHandle extends SocketHandle {
 			}
 			
 			response.setHeader("Server:", "com.dinamoproductions.wowow");
+			response.setHeader("Cache-Control:", response.cacheControlMaxAge);
+			response.setHeader("Date:", HttpDate.rfc1123Format.format(new Date()));
 			
 			if (response.inputStream != null&&response.getHeader("Content-Length:")==null)
 				response.setHeader("Content-Length:", Integer.toString(response.inputStream.available(),10));

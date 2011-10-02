@@ -15,11 +15,19 @@ public class HttpRequest {
 	private HttpHeaders headers = new HttpHeaders();
 	boolean gotAllHeaders=false;
 	BufferedReader in = null;
+	private HttpCacheControl httpCacheControl=null;
 
 	public HttpRequest(Socket s) {
 		baseSocket = s;
 	}
 
+	public HttpCacheControl getHttpCacheControl() throws IOException {
+		if (httpCacheControl == null) {
+			return httpCacheControl = new HttpCacheControl(this);
+		}
+		return httpCacheControl;
+	}
+	
 	public HttpResponse getResponse() throws IOException {
 		if (httpResponse == null) {
 			return httpResponse = new HttpResponse();
@@ -81,6 +89,7 @@ public class HttpRequest {
 	public String getHeader(String header) {
 		String h = null;
 		try {
+			header=header.toLowerCase();
 			h= (String) headers.get(header);
 			if(h!=null)return h;
 			h = (String) this.getHeaders(header).get(header);
