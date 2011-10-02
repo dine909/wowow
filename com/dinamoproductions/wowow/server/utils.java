@@ -9,7 +9,7 @@ public class utils {
 	public final static class ChannelTools {
 		public static void fastChannelCopy(final ReadableByteChannel src,
 				final WritableByteChannel dest) throws IOException {
-			final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
+			final ByteBuffer buffer = ByteBuffer.allocateDirect(8 * 1024);
 			while (src.read(buffer) != -1) {
 				// prepare the buffer to be drained
 				buffer.flip();
@@ -27,11 +27,12 @@ public class utils {
 			}
 		}
 
-		public static void fastStreamCopy(final InputStream is, OutputStream os)
+		public static void streamCopy(final InputStream is, OutputStream os)
 				throws IOException {
 			fastChannelCopy((ReadableByteChannel) Channels.newChannel(is),
 					(WritableByteChannel) Channels.newChannel(os));
 		}
+		
 		public static String convertStreamToString(InputStream is) { 
 		    return new Scanner(is).useDelimiter("\\A").next();
 		}
