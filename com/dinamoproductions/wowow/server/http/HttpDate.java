@@ -22,7 +22,7 @@ public class HttpDate {
      * format for RFC 1123 date string -- "Sun, 06 Nov 1994 08:49:37 GMT"
      */
     public final static String RFC1123_PATTERN =
-        "EEE, dd MMM yyyyy HH:mm:ss z";
+        "EEE, dd MMM yyyy HH:mm:ss z";
 
     /** 
      * Format for http response header date field
@@ -36,7 +36,7 @@ public class HttpDate {
 
     // format for C asctime() date string -- "Sun Nov  6 08:49:37 1994"
     private final static String asctimePattern =
-        "EEE MMM d HH:mm:ss yyyyy";
+        "EEE MMM d HH:mm:ss yyyy";
 
     /**
      * Pattern used for old cookies
