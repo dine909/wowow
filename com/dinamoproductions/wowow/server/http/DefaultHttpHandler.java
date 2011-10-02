@@ -1,15 +1,11 @@
-package com.dinamoproductions.wowow.server.http.handlers;
+package com.dinamoproductions.wowow.server.http;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
-import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
-import com.dinamoproductions.wowow.server.http.HttpRequest;
-import com.dinamoproductions.wowow.server.http.HttpResponse;
-import com.dinamoproductions.wowow.server.http.StatusCodes;
 
-public class DefaultHttpHandler extends HttpHandler{
+public class DefaultHttpHandler extends AbstractHttpHandler{
 	
 	public DefaultHttpHandler(HttpHeaderMatcher matcher) {
 		super(matcher);

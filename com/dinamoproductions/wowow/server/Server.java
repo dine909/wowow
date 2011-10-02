@@ -8,12 +8,8 @@ import java.net.*;
 import java.util.*;
 
 import com.dinamoproductions.wowow.filesystem.*;
-import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
-import com.dinamoproductions.wowow.server.http.HttpSocketHandler;
-import com.dinamoproductions.wowow.server.http.PathMatcher;
-import com.dinamoproductions.wowow.server.http.handlers.DefaultHttpHandler;
-import com.dinamoproductions.wowow.server.http.handlers.FileSystemHttpHandler;
-
+import com.dinamoproductions.wowow.server.http.*;
+import com.dinamoproductions.wowow.server.http.handlers.*;
 
 public class Server extends Thread {
 	public static LinkedList<Socket> clientList = new LinkedList<Socket>();

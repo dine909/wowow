@@ -1,17 +1,15 @@
-package com.dinamoproductions.wowow.server.http.handlers;
+package com.dinamoproductions.wowow.server.http;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.URISyntaxException;
 
-import com.dinamoproductions.wowow.server.http.HttpHeaderMatcher;
-import com.dinamoproductions.wowow.server.http.HttpRequest;
 
-public class HttpHandler {
+public abstract class AbstractHttpHandler {
 	public HttpHeaderMatcher httpHeaderMatcher=null;
 
-	public HttpHandler(HttpHeaderMatcher m) {
+	public AbstractHttpHandler(HttpHeaderMatcher m) {
 		httpHeaderMatcher=m;
 	}
 

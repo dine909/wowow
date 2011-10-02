@@ -10,9 +10,9 @@ import com.dinamoproductions.wowow.server.utils;
 import com.dinamoproductions.wowow.server.http.handlers.*;
 
 public class HttpSocketHandle extends SocketHandle {
-	LinkedList<HttpHandler> handlerList;
+	LinkedList<AbstractHttpHandler> handlerList;
 
-	public HttpSocketHandle(Socket _s, LinkedList<HttpHandler> h) {
+	public HttpSocketHandle(Socket _s, LinkedList<AbstractHttpHandler> h) {
 		super(_s);
 		handlerList = h;
 	}
@@ -23,7 +23,7 @@ public class HttpSocketHandle extends SocketHandle {
 		HttpResponse response = null;
 		URI uNormalized =null;
 		try {			
-			for (HttpHandler h : handlerList) {
+			for (AbstractHttpHandler h : handlerList) {
 				h.handle(request);
 				if (request.handled)
 					break;

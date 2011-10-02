@@ -7,14 +7,14 @@ import com.dinamoproductions.wowow.server.*;
 import com.dinamoproductions.wowow.server.http.handlers.*;
 
 public class HttpSocketHandler extends SocketHandler  {
-	public static LinkedList<HttpHandler> handlerList = new LinkedList<HttpHandler>();
+	public static LinkedList<AbstractHttpHandler> handlerList = new LinkedList<AbstractHttpHandler>();
 
 	public HttpSocketHandler() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void addHandler(HttpHandler h){
+	public void addHandler(AbstractHttpHandler h){
 		handlerList.add(h);
 	}
 	

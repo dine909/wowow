@@ -11,7 +11,7 @@ import com.dinamoproductions.wowow.server.utils;
 import com.dinamoproductions.wowow.server.http.*;
 import com.dinamoproductions.wowow.filesystem.*;
 
-public class FileSystemHttpHandler extends HttpHandler {
+public class FileSystemHttpHandler extends AbstractHttpHandler {
 	AbstractFile file=null;
 	
 	public boolean allowDirectoryBrowsing=false
