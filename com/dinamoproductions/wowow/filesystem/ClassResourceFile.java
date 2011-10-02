@@ -15,11 +15,24 @@ public class ClassResourceFile extends AbstractFile {
 
 	private String removeSlash() {
 		String path = this.getPath();
-		if(path.startsWith("/")){
-			path=path.substring(1);
-			
-		}
+//		if(path.startsWith("/")){
+//			path=path.substring(1);
+//			
+//		}
 		return path;
+	}
+	
+	public AbstractFile getFile(){
+		String path = removeSlash();
+		URL dirURL = resourceClass.getClassLoader().getResource(path);
+		if (dirURL != null && dirURL.getProtocol().equals("file")) {
+			String parts = resourceClass.toString().split(" ")[1];
+			int lastdot=parts.lastIndexOf('.');
+			String classdir=parts.substring(0, lastdot).replace('.', '/');
+			
+			return new FileSystemFile(dirURL.toString().substring(5)+classdir);
+		} 
+		return this;
 	}
 	
 	public ClassResourceFile(String pathname) throws IOException {
@@ -82,15 +95,15 @@ public class ClassResourceFile extends AbstractFile {
 	public String[] list() {
 		String path = removeSlash();
 		URL dirURL = resourceClass.getClassLoader().getResource(path);
-	      if (dirURL != null && dirURL.getProtocol().equals("file")) {
-	        /* A file path: easy enough */
-	        try {
+		if (dirURL != null && dirURL.getProtocol().equals("file")) {
+			/* A file path: easy enough */
+			try {
 				return new File(dirURL.toURI()).list();
 			} catch (URISyntaxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	      } 
+		} 
 
 	      if (dirURL == null) {
 	        /* 
