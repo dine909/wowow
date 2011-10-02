@@ -8,6 +8,7 @@ public class HttpCacheControl {
 	
 	public HttpCacheControl(HttpRequest request){
 		cacheControl=request.getHeader("cache-control:");
+		if(cacheControl==null)return;
 		if(cacheControl.contains("max-age=0")||cacheControl.contains("no-cache")){
 			mustNotCache=true;
 			preferCache=false;

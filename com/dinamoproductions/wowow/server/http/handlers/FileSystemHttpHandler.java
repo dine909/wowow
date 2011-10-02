@@ -88,7 +88,6 @@ public class FileSystemHttpHandler extends HttpHandler {
 			}
 			
 			HttpCacheControl httpCacheControl=request.getHttpCacheControl();
-			response.setCacheMaxAge(300);
 			request.handled=true;
 			
 		}
