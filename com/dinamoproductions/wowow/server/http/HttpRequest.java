@@ -37,7 +37,6 @@ public class HttpRequest {
 	public URI getPathInfo() throws IOException, URISyntaxException{
 		if(pathInfo==null){
 			String get=getHeader("get").split(" ")[0];
-			int posToParms=get.indexOf('?');
 			pathInfo=new URI(get).normalize();
 		}
 		return pathInfo;
