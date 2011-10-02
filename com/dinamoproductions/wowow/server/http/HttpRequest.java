@@ -13,6 +13,9 @@ public class HttpRequest {
 	private URI relPath = null;
 	HttpResponse httpResponse = null;
 	private HttpHeaders headers = new HttpHeaders();
+	boolean gotAllHeaders=false;
+	BufferedReader in = null;
+
 	public HttpRequest(Socket s) {
 		baseSocket = s;
 	}
@@ -31,16 +34,14 @@ public class HttpRequest {
 		}
 		return pathInfo;
 	}
+	
 	public HttpHeaders getHeaders(String header) throws IOException {
 		if (header != null)
 			header = header.toLowerCase();
-		if (headers.size() > 0)
+		if (gotAllHeaders)
 			return headers;
 
-		BufferedReader in = null;
-
-		in = new BufferedReader(new InputStreamReader(
-				baseSocket.getInputStream()));
+		in = getInputStream();
 		while (!in.ready())
 			;
 		while (true) {
@@ -48,9 +49,10 @@ public class HttpRequest {
 			s = in.readLine().trim();
 
 			if (s.equals("")) {
+				gotAllHeaders=true;
 				break;
 			}
-			Pattern pattern = Pattern.compile("(.*?) (.*)");
+			Pattern pattern = Pattern.compile("^(.*?) (.*)$");
 			Matcher matcher = pattern.matcher(s);
 			boolean matchFound = matcher.find();
 
@@ -69,9 +71,24 @@ public class HttpRequest {
 
 	}
 
-	public String getHeader(String header) throws IOException {
+	private BufferedReader getInputStream() throws IOException {
+		if(in!=null)return in;
+		in = new BufferedReader(new InputStreamReader(
+				baseSocket.getInputStream()));
+		return in;
+	}
+
+	public String getHeader(String header) {
 		String h = null;
-		h = (String) this.getHeaders(header).get(header);
+		try {
+			h= (String) headers.get(header);
+			if(h!=null)return h;
+			h = (String) this.getHeaders(header).get(header);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		return h;
 	}
 

@@ -16,6 +16,9 @@ public class HttpResponse {
 	public void setHeader(String key,String value){
 		headers.put(key, value);
 	}
+	public String getHeader(String key){
+		return (String) headers.get(key);
+	}
 	
 	public String getHeaders(){
 		String ret="";
