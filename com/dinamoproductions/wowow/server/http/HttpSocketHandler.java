@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import com.dinamoproductions.wowow.server.*;
 import com.dinamoproductions.wowow.server.http.handlers.*;
 
-public class HttpSocketHandler extends SocketHandler  {
+public class HttpSocketHandler extends AbstractSocketHandler  {
 	public static LinkedList<AbstractHttpHandler> handlerList = new LinkedList<AbstractHttpHandler>();
 
 	public HttpSocketHandler() {

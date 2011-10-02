@@ -2,7 +2,7 @@ package com.dinamoproductions.wowow.server;
 
 import java.net.*;
 
-public class SocketHandler  {
+public abstract class AbstractSocketHandler  {
 		
 	public void handle(Socket _s){
 	

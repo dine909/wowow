@@ -15,7 +15,7 @@ public class Server extends Thread {
 	public static LinkedList<Socket> clientList = new LinkedList<Socket>();
 	boolean running=false;
 	ServerSocket listener=null;
-	SocketHandler shSocketHandler;
+	AbstractSocketHandler shSocketHandler;
 	
 	public Server(int port) throws IOException {
 		super();
@@ -38,7 +38,7 @@ public class Server extends Thread {
 			clientList.add(client);
 		}
 	}
-	public void setSocketHandler(SocketHandler _cS){
+	public void setSocketHandler(AbstractSocketHandler _cS){
 		shSocketHandler=_cS;
 	}
 	public void stopServer() {

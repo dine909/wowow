@@ -3,9 +3,9 @@ package com.dinamoproductions.wowow.server;
 import java.io.IOException;
 import java.net.*;
 
-public class SocketHandle extends Thread {
+public abstract class AbstractSocketHandle extends Thread {
 	public Socket baseSocket=null;
-	public SocketHandle(Socket s) {
+	public AbstractSocketHandle(Socket s) {
 		baseSocket=s;
 	}
 
