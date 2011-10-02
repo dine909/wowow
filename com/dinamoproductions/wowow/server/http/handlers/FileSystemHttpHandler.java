@@ -60,32 +60,35 @@ public class FileSystemHttpHandler extends HttpHandler {
 			response.statusCode=StatusCodes.SC_OK;
 
 			if(sContentRange!=null){
-				String sRange=sContentRange.substring(6);
-				start=0;
-				String[] split = sRange.split("-");
-				int available = response.inputStream.available();
-				if(sRange.startsWith("-")){
+				if(sContentRange.startsWith("bytes=")){
+					String sRange=sContentRange.substring(6);
 					start=0;
-					end=Integer.parseInt(split[1]);
-				}else if (sRange.endsWith("-")){
-					start=Integer.parseInt(split[0]);
-					end=available;
-				}else if (sRange.contains("-")){
-					start=Integer.parseInt(split[0]);
-					end=Integer.parseInt(split[1]);
-				}
-				if(start>0){
-					response.inputStream.skip(start);
-				}
-				
-				int size = end-start;
-				if(size!=available){
-					response.statusCode=StatusCodes.SC_PARTIAL_CONTENT;
-					response.setHeader("Content-Length:", Integer.toString(size,10));
+					String[] split = sRange.split("-");
+					int available = response.inputStream.available();
 					
+					start=0;
+					end=available-1;
+
+					if(sRange.startsWith("-")){
+						end=Integer.parseInt(split[1]);
+					}else if (sRange.endsWith("-")){
+						start=Integer.parseInt(split[0]);
+					}else if (sRange.contains("-")){
+						start=Integer.parseInt(split[0]);
+						end=Integer.parseInt(split[1]);
+					}
+					if(start>0){
+						response.inputStream.skip(start);
+					}
+					
+					int size = end-start;
+					if(size!=available){
+						response.statusCode=StatusCodes.SC_PARTIAL_CONTENT;
+						response.setHeader("Content-Length:", Integer.toString(size,10));
+						
+					}
+					response.setHeader("Content-Range:", "bytes " + start +"-"+(end)+"/"+available);	
 				}
-				response.setHeader("Content-Range:", "bytes " + start +"-"+(end-1)+"/"+available);
-				
 			}
 			
 			HttpCacheControl httpCacheControl=request.getHttpCacheControl();
